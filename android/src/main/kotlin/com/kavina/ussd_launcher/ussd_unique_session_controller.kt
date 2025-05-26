@@ -61,7 +61,7 @@ class UssdSessionUnique(private val context: Context) {
                     "number" to subscriptionInfo.number,
                     "slotIndex" to subscriptionInfo.simSlotIndex,
                     "countryIso" to subscriptionInfo.countryIso,
-                    "carrierId" to subscriptionInfo.carrierId,
+                    "carrierId" to if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) subscriptionInfo.carrierId else null,
                     "isEmbedded" to subscriptionInfo.isEmbedded,
                     "iccId" to subscriptionInfo.iccId,
                 )
