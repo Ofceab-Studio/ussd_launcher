@@ -52,23 +52,27 @@ class UssdSessionUnique(private val context: Context) {
         val subscriptionManager = context.getSystemService(Context.TELEPHONY_SUBSCRIPTION_SERVICE) as SubscriptionManager
         val activeSubscriptionInfoList = subscriptionManager.activeSubscriptionInfoList
 
-        if (activeSubscriptionInfoList != null) {
-            val simCards = activeSubscriptionInfoList.map { subscriptionInfo ->
-                mapOf(
-                    "subscriptionId" to subscriptionInfo.subscriptionId,
-                    "displayName" to subscriptionInfo.displayName,
-                    "carrierName" to subscriptionInfo.carrierName,
-                    "number" to subscriptionInfo.number,
-                    "slotIndex" to subscriptionInfo.simSlotIndex,
-                    "countryIso" to subscriptionInfo.countryIso,
-                    "carrierId" to if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) subscriptionInfo.carrierId else null,
-                    "isEmbedded" to subscriptionInfo.isEmbedded,
-                    "iccId" to subscriptionInfo.iccId,
-                )
+        try {
+             if (activeSubscriptionInfoList != null) {
+                val simCards = activeSubscriptionInfoList.map { subscriptionInfo ->
+                    mapOf(
+                        "subscriptionId" to subscriptionInfo.subscriptionId,
+                        "displayName" to subscriptionInfo.displayName,
+                        "carrierName" to subscriptionInfo.carrierName,
+                        "number" to subscriptionInfo.number,
+                        "slotIndex" to subscriptionInfo.simSlotIndex,
+                        "countryIso" to subscriptionInfo.countryIso,
+                        "carrierId" to if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) subscriptionInfo.carrierId else null,
+                        "isEmbedded" to subscriptionInfo.isEmbedded,
+                        "iccId" to subscriptionInfo.iccId,
+                    )
+                }
+                result.success(simCards)
+            } else {
+                result.error("NO_SIM_CARDS", "No SIM cards found", null)
             }
-            result.success(simCards)
-        } else {
-            result.error("NO_SIM_CARDS", "No SIM cards found", null)
+        } catch (ex: Exception) {
+            
         }
     }
 }
