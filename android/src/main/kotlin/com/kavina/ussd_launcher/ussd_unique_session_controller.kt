@@ -49,11 +49,10 @@ class UssdSessionUnique(private val context: Context) {
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP_MR1)
     fun getSimCards(result: MethodChannel.Result) {
-        val subscriptionManager = context.getSystemService(Context.TELEPHONY_SUBSCRIPTION_SERVICE) as SubscriptionManager
-        val activeSubscriptionInfoList = subscriptionManager.activeSubscriptionInfoList
-
         try {
-             if (activeSubscriptionInfoList != null) {
+            val subscriptionManager = context.getSystemService(Context.TELEPHONY_SUBSCRIPTION_SERVICE) as SubscriptionManager
+            val activeSubscriptionInfoList = subscriptionManager.activeSubscriptionInfoList
+                if (activeSubscriptionInfoList != null) {
                 val simCards = activeSubscriptionInfoList.map { subscriptionInfo ->
                     mapOf(
                         "subscriptionId" to subscriptionInfo.subscriptionId,
@@ -72,7 +71,7 @@ class UssdSessionUnique(private val context: Context) {
                 result.error("NO_SIM_CARDS", "No SIM cards found", null)
             }
         } catch (ex: Exception) {
-            
+                            
         }
     }
 }
